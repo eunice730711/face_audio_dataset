@@ -130,9 +130,3 @@ if(__name__=='__main__'):
 	myclip=read_vedio(args["video"])
 	face_pos, frame_rec = face_detect(myclip)
 	write_dataset(myclip,face_pos,frame_rec)
-
-
-
-
-
-
