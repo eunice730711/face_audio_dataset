@@ -4,9 +4,9 @@ npzfile = np.load("./output/mynpz.npz")
 count=0
 print("Length of npz file:")
 print(len(npzfile['x']))
-print("前100筆數值:")
+print("前1000筆數值:")
 for x, y in zip(npzfile['x'],npzfile['y']):
 	print((x,y))
-	if count==100:
+	if count==1000:
 		break
 	count+=1
