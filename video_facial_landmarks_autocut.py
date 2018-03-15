@@ -121,7 +121,6 @@ def face_detect(videoclip, detector, predictor):
 		# detect faces in the grayscale frame
 		rects = detector(gray, 0)
 		# loop over the face detections
-		print(len(rects))
 		for rect in rects:
 			# determine the facial landmarks for the face region, then
 			# convert the facial landmark (x, y)-coordinates to a NumPy
@@ -203,6 +202,7 @@ def write_dataset(videoclip, left_dis, right_dis, check_detect, outfile, normali
 		x_seq.append(frame[0]) #僅取單聲道(作為training data的input)
 		if frame_iter == 2450 and check_detect[video_iter]!=None: # 若此frame有偵測到臉則紀錄聲音與表情
 			inseq.append(x_seq) 
+			frame_iter =0
 			x_seq = []
 			x, y = check_detect[video_iter]
 			video_iter+=1
@@ -261,7 +261,7 @@ if(__name__=='__main__'):
 			t_end = item
 			print(t_start, t_end)
 			left_dis, right_dis, check_detect = face_detect(myclip.subclip(t_start, t_end), detector, predictor)
-			filename = 'data'+str(file_idx)
+			filename = args["video"][7:-4]+str(file_idx)
 			file_idx+=1
 			write_dataset(myclip.subclip(t_start, t_end), left_dis, right_dis, check_detect, filename)
 		else:
