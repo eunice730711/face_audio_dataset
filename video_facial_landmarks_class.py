@@ -207,21 +207,20 @@ def write_dataset(videoclip, left_dis, right_dis, check_detect, outfile, normali
 	# record frame picture and audio
 	for frame in audioclip.iter_frames(fps=44100): # normal sample numbers
 		x_seq.append(frame[0]) #僅取單聲道(作為training data的input)
-		if frame_iter == 2450 and check_detect[video_iter]!=None: # 若此frame有偵測到臉則紀錄聲音與表情
-			inseq.append(x_seq) 
-			frame_iter =0
+		if frame_iter == 2450:
+			if check_detect[video_iter]!=None: # 若此frame有偵測到臉則紀錄聲音與表情
+				inseq.append(x_seq) 
+				frame_iter =0
+				x, y = check_detect[video_iter]
+				if normalize==True: # 參數決定將值normalize到-1~1之間
+					outseq.append((x, y))
+				else:
+					outseq.append((x-left_avg, y-right_avg))# (作為training data的output)
 			x_seq = []
-			x, y = check_detect[video_iter]
 			video_iter+=1
-			if normalize==True: # 參數決定將值normalize到-1~1之間
-				outseq.append((x, y))
-			else:
-				outseq.append((x-left_avg, y-right_avg))# (作為training data的output)
-
 		# else: # 若此frame無偵測到臉則紀錄聲音 表情設定(0,0)=中性表情
 		# 	inseq.append(frame[0]) #僅取單聲道(作為training data的input)
 		# 	outseq.append((0, 0))
-
 		frame_iter+=1
 
 	# 存成npz(output filename暫定mynpz.npz)
@@ -359,9 +358,9 @@ def write_labels(videoclip, check_detect, outfile, videofps):
 		if frame_iter == 1000: # 每次紀錄2450個點
 			if check_detect[video_iter]!=None: # 若此frame有偵測到臉則紀錄聲音與表情
 				inseq.append(x_seq) 
-				x_seq = []
 				label = check_detect[video_iter]
 				outseq.append((x_seq, label))
+			x_seq = []
 			video_iter +=1
 			frame_iter =0
 		frame_iter+=1
