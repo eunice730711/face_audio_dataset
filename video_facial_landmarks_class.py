@@ -350,12 +350,12 @@ def write_labels(videoclip, check_detect, outfile, videofps):
 	outseq = []
 	x_seq = [] 
 
-	train_len = 1000
+	train_len = 1024
 	video_frames = len(check_detect)
 	# record frame picture and audio
 	for frame in audioclip.iter_frames(fps=train_len*videofps): # normal sample numbers
 		x_seq.append(frame[0]) #僅取單聲道(作為training data的input)
-		if frame_iter == 1000: # 每次紀錄2450個點
+		if frame_iter == 1024: # 每次紀錄2450個點
 			if check_detect[video_iter]!=None: # 若此frame有偵測到臉則紀錄聲音與表情
 				inseq.append(x_seq) 
 				label = check_detect[video_iter]
